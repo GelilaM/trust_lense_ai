@@ -120,7 +120,7 @@ class TrustCardWidget extends StatelessWidget {
                         ),
                       ),
                       child: Text(
-                        'SELECT PRODUCT',
+                        'ADD TRUST CARD',
                         style: GoogleFonts.inter(
                           fontSize: 14.sp,
                           fontWeight: FontWeight.bold,
@@ -140,7 +140,7 @@ class TrustCardWidget extends StatelessWidget {
                     ),
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -161,24 +161,6 @@ class TrustCardWidget extends StatelessWidget {
                             ),
                           ),
                         ],
-                      ),
-                      GestureDetector(
-                        onTap: onSelectProductPressed,
-                        child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.white24),
-                            borderRadius: BorderRadius.circular(8.r),
-                          ),
-                          child: Text(
-                            'MANAGE',
-                            style: GoogleFonts.inter(
-                              fontSize: 10.sp,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
                       ),
                     ],
                   ),

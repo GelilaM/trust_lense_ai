@@ -74,7 +74,10 @@ class ProfileDashboardView extends GetView<ProfileDashboardController> {
         final profile = controller.userProfile.value;
         final trust = controller.trustResult.value;
         final score = trust?.combined.combinedScore ?? 0;
-        final hasCard = trustCardController.card.value != null;
+        final card = trustCardController.card.value;
+        final hasCard = card != null;
+        final products = card?.availableProducts ?? _defaultProducts;
+        final showAddProductAction = hasCard && products.length > 1;
 
         return SingleChildScrollView(
           child: Padding(
@@ -102,7 +105,11 @@ class ProfileDashboardView extends GetView<ProfileDashboardController> {
                 SectionHeader(
                   title: 'Digital Trust Card',
                   subtitle: hasCard ? 'Active' : '',
-                  actionText: hasCard ? 'Details' : '',
+                  actionText: '',
+                  actionIcon: showAddProductAction ? Icons.add_circle : null,
+                  onActionTap: showAddProductAction
+                      ? () => _showProductSelectionModal(context)
+                      : null,
                 ),
                 SizedBox(height: 16.h),
                 if (hasCard)
@@ -148,7 +155,7 @@ class ProfileDashboardView extends GetView<ProfileDashboardController> {
                         SizedBox(height: 8.h),
                         Text(
                           score > 45
-                              ? 'Unlock your virtual fiduciary card to access premium financial products.'
+                              ? 'Add your Trust Card first, then choose eligible financial products.'
                               : 'A Trust Score of 45+ is required to request a Digital Fiduciary Card.',
                           textAlign: TextAlign.center,
                           style: context.textTheme.bodySmall?.copyWith(
@@ -159,7 +166,7 @@ class ProfileDashboardView extends GetView<ProfileDashboardController> {
                         if (score > 45) ...[
                           SizedBox(height: 24.h),
                           BaseButton(
-                            text: 'Select Product',
+                            text: 'Add Trust Card',
                             onPressed: () => _showProductSelectionModal(context),
                           ),
                         ],

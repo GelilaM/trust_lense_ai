@@ -93,14 +93,36 @@ class DashboardView extends GetView<DashboardController> {
                   SizedBox(height: 16.h),
                   Obx(() {
                     final cardController = Get.find<TrustCardController>();
+                    final card = cardController.card.value;
+                    final products = card?.availableProducts ?? _defaultProducts;
+                    final showAddProductAction = card != null && products.length > 1;
                     final trustScore = trust?.combined.combinedScore ?? 0;
                     final isLocked = trustScore <= 45;
-                    
-                    return TrustCardWidget(
-                      card: cardController.card.value,
-                      isLocked: isLocked,
-                      onIssuePressed: () => _showProductSelectionModal(context),
-                      onSelectProductPressed: () => _showProductSelectionModal(context),
+
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SectionHeader(
+                          title: 'Digital Trust Card',
+                          subtitle: card != null ? 'Active' : '',
+                          actionText: '',
+                          actionIcon: showAddProductAction
+                              ? Icons.add_circle
+                              : null,
+                          onActionTap: showAddProductAction
+                              ? () => _showProductSelectionModal(context)
+                              : null,
+                        ),
+                        SizedBox(height: 16.h),
+                        TrustCardWidget(
+                          card: card,
+                          isLocked: isLocked,
+                          onIssuePressed: () =>
+                              _showProductSelectionModal(context),
+                          onSelectProductPressed: () =>
+                              _showProductSelectionModal(context),
+                        ),
+                      ],
                     );
                   }),
                   SizedBox(height: 32.h),

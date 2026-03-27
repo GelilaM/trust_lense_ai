@@ -7,6 +7,8 @@ class SectionHeader extends StatelessWidget {
   final String? subtitle;
   final String actionText;
   final bool isIcon;
+  final IconData? actionIcon;
+  final VoidCallback? onActionTap;
 
   const SectionHeader({
     super.key,
@@ -14,6 +16,8 @@ class SectionHeader extends StatelessWidget {
     this.subtitle,
     required this.actionText,
     this.isIcon = false,
+    this.actionIcon,
+    this.onActionTap,
   });
 
   @override
@@ -51,7 +55,16 @@ class SectionHeader extends StatelessWidget {
               color: context.theme.colorScheme.primary,
             ),
           ),
-        if (isIcon)
+        if (actionIcon != null)
+          GestureDetector(
+            onTap: onActionTap,
+            child: Icon(
+              actionIcon,
+              color: context.theme.colorScheme.secondary,
+              size: 22.sp,
+            ),
+          )
+        else if (isIcon)
           Icon(
             Icons.history,
             color: context.theme.colorScheme.onSurface.withValues(alpha: 0.8),
