@@ -43,3 +43,11 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Agent/tooling workspace artifacts
+.agent/
+
+# Ignore markdown docs by default, keep primary README files
+**/*.md
+!README.md
+!**/README.md
