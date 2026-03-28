@@ -10,6 +10,7 @@ import '../../../widgets/base_button.dart';
 import '../../../widgets/base_text_field.dart';
 import '../../../widgets/base_card.dart';
 import '../../../widgets/base_dropdown.dart';
+import '../../../widgets/kifiya_logo.dart';
 
 class SignupView extends GetView<SignupController> {
   const SignupView({super.key});
@@ -22,30 +23,21 @@ class SignupView extends GetView<SignupController> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              // Header
+              // Header — Kifiya + product line
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
-                child: Row(
+                padding: EdgeInsets.fromLTRB(24.w, 20.h, 24.w, 8.h),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      padding: EdgeInsets.all(6.w),
-                      decoration: BoxDecoration(
-                        color: context.theme.colorScheme.primary, // Deep Navy
-                        borderRadius: BorderRadius.circular(8.r),
-                      ),
-                      child: Icon(
-                        Icons.security,
-                        color: context.theme.colorScheme.tertiary,
-                        size: 16.w,
-                      ),
-                    ),
-                    SizedBox(width: 12.w),
+                    KifiyaLogo(height: 48.h),
+                    SizedBox(height: 12.h),
                     Text(
                       'TrustLens AI',
                       style: GoogleFonts.inter(
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 15.sp,
+                        fontWeight: FontWeight.w600,
                         color: context.theme.colorScheme.primary,
+                        letterSpacing: -0.2,
                       ),
                     ),
                   ],
