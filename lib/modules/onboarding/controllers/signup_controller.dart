@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../../../routes/app_routes.dart';
 import '../../../data/providers/auth_provider.dart';
 import '../../../core/services/auth_service.dart';
+import '../../../core/utils/phone_validation.dart';
 
 
 class SignupController extends GetxController {
@@ -35,6 +36,7 @@ class SignupController extends GetxController {
   final nameError = RxnString();
   final phoneError = RxnString();
   final passwordError = RxnString();
+  final obscurePassword = true.obs;
   final occupationError = RxnString();
   final sexError = RxnString();
   final incomeError = RxnString();
@@ -53,11 +55,9 @@ class SignupController extends GetxController {
       nameError.value = null;
     }
 
-    if (phoneController.text.trim().isEmpty) {
-      phoneError.value = 'Phone number is required';
-      isValid = false;
-    } else if (!GetUtils.isPhoneNumber(phoneController.text.trim())) {
-      phoneError.value = 'Please enter a valid phone number';
+    final phoneErr = PhoneValidation.validate(phoneController.text);
+    if (phoneErr != null) {
+      phoneError.value = phoneErr;
       isValid = false;
     } else {
       phoneError.value = null;
@@ -149,7 +149,7 @@ class SignupController extends GetxController {
 
       final user = await _authProvider.signUp(
         fullName: nameController.text.trim(),
-        phone: phoneController.text.trim(),
+        phone: PhoneValidation.normalizeDigits(phoneController.text),
         sex: sex.value,
         dateOfBirth: dateOfBirth.value!.toIso8601String().split('T')[0],
         nationality: nationalityController.text.trim(),
@@ -185,6 +185,10 @@ class SignupController extends GetxController {
     }
   }
 
+
+  void togglePasswordVisibility() {
+    obscurePassword.value = !obscurePassword.value;
+  }
 
   void previousStep() {
     if (currentStep.value > 1) {

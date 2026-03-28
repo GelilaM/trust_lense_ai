@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:gal/gal.dart';
 import '../../../core/services/verification_service.dart';
 import '../../../routes/app_routes.dart';
+import '../widgets/id_image_crop_page.dart';
 
 
 enum IdCaptureStep { front, back, review }
@@ -110,6 +111,39 @@ class IdCaptureController extends GetxController {
       frontImagePath.value = null;
     } else if (currentStep.value == IdCaptureStep.back) {
       backImagePath.value = null;
+    }
+  }
+
+  /// Opens crop UI for the image captured on the current front/back step.
+  Future<void> openCropEditorForCurrentStep() async {
+    final path = switch (currentStep.value) {
+      IdCaptureStep.front => frontImagePath.value,
+      IdCaptureStep.back => backImagePath.value,
+      IdCaptureStep.review => null,
+    };
+    if (path == null) return;
+    final newPath = await Get.to<String>(() => IdImageCropPage(imagePath: path));
+    if (newPath == null || newPath.isEmpty) return;
+    switch (currentStep.value) {
+      case IdCaptureStep.front:
+        frontImagePath.value = newPath;
+      case IdCaptureStep.back:
+        backImagePath.value = newPath;
+      case IdCaptureStep.review:
+        break;
+    }
+  }
+
+  /// Opens crop UI for front or back during final review.
+  Future<void> openCropEditorForSide({required bool isFront}) async {
+    final path = isFront ? frontImagePath.value : backImagePath.value;
+    if (path == null) return;
+    final newPath = await Get.to<String>(() => IdImageCropPage(imagePath: path));
+    if (newPath == null || newPath.isEmpty) return;
+    if (isFront) {
+      frontImagePath.value = newPath;
+    } else {
+      backImagePath.value = newPath;
     }
   }
 

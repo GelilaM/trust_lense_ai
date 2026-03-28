@@ -94,8 +94,10 @@ class DashboardView extends GetView<DashboardController> {
                   Obx(() {
                     final cardController = Get.find<TrustCardController>();
                     final card = cardController.card.value;
-                    final products = card?.availableProducts ?? _defaultProducts;
-                    final showAddProductAction = card != null && products.length > 1;
+                    final products =
+                        card?.availableProducts ?? _defaultProducts;
+                    final showAddProductAction =
+                        card != null && products.length > 1;
                     final trustScore = trust?.combined.combinedScore ?? 0;
                     final isLocked = trustScore <= 45;
 
@@ -104,7 +106,7 @@ class DashboardView extends GetView<DashboardController> {
                       children: [
                         SectionHeader(
                           title: 'Digital Trust Card',
-                          subtitle: card != null ? 'Active' : '',
+                          subtitle: null,
                           actionText: '',
                           actionIcon: showAddProductAction
                               ? Icons.add_circle
@@ -154,7 +156,8 @@ class DashboardView extends GetView<DashboardController> {
                       ServiceCard(
                         icon: Icons.shopping_cart_outlined,
                         title: 'BNPL',
-                        subtitle: eligible?.deviceFinancingOffer ?? 'Device Finance',
+                        subtitle:
+                            eligible?.deviceFinancingOffer ?? 'Device Finance',
                         isActive: eligible?.eligibleForDeviceFinancing ?? false,
                       ),
                       ServiceCard(
@@ -168,7 +171,7 @@ class DashboardView extends GetView<DashboardController> {
                   SizedBox(height: 24.h),
                   AiInsightCard(
                     textPart1: 'AI Insight: ',
-                    textPart2: trust != null 
+                    textPart2: trust != null
                         ? 'Your strongest modality is ${trust.combined.videoScore >= 80 ? "Video" : "Document"}. Complete all checks for maximum trust.'
                         : 'Complete your identity verification to unlock premium AI insights and higher credit limits.',
                   ),
@@ -184,7 +187,9 @@ class DashboardView extends GetView<DashboardController> {
                       ActivityItem(
                         icon: Icons.check_circle_outline,
                         title: 'ID Verification',
-                        subtitle: trust != null ? 'Trust Score: ${trust.combined.combinedScore}%' : 'Pending',
+                        subtitle: trust != null
+                            ? 'Trust Score: ${trust.combined.combinedScore}%'
+                            : 'Pending',
                         status: trust != null ? 'Completed' : 'Action Required',
                         time: 'LATEST',
                       ),
@@ -192,7 +197,9 @@ class DashboardView extends GetView<DashboardController> {
                       ActivityItem(
                         icon: Icons.storage_outlined,
                         title: 'Credit Assessment',
-                        subtitle: eligible != null ? eligible.loanTier : 'Evaluating',
+                        subtitle: eligible != null
+                            ? eligible.loanTier
+                            : 'Evaluating',
                         status: eligible != null ? 'Updated' : 'Pending',
                         time: 'RECENT',
                       ),
@@ -240,9 +247,8 @@ class DashboardView extends GetView<DashboardController> {
             SizedBox(height: 24.h),
             ...products.map((product) {
               final productKey = product.key.trim().toLowerCase();
-              final alreadyRequested = cardController.requestedProducts.contains(
-                productKey,
-              );
+              final alreadyRequested = cardController.requestedProducts
+                  .contains(productKey);
               final isSelected = card?.selectedProduct == product.key;
               return Container(
                 margin: EdgeInsets.only(bottom: 12.h),
@@ -263,7 +269,10 @@ class DashboardView extends GetView<DashboardController> {
                   ),
                 ),
                 child: ListTile(
-                  contentPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 20.w,
+                    vertical: 8.h,
+                  ),
                   title: Text(
                     product.label,
                     style: context.textTheme.titleMedium?.copyWith(
@@ -271,14 +280,15 @@ class DashboardView extends GetView<DashboardController> {
                     ),
                   ),
                   subtitle: Text(
-                    alreadyRequested ? 'Already requested' : product.description,
+                    alreadyRequested
+                        ? 'Already requested'
+                        : product.description,
                   ),
                   trailing: alreadyRequested
                       ? Icon(
                           Icons.lock_outline,
-                          color: context.theme.colorScheme.onSurface.withOpacity(
-                            0.5,
-                          ),
+                          color: context.theme.colorScheme.onSurface
+                              .withOpacity(0.5),
                         )
                       : isSelected
                       ? Icon(

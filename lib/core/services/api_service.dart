@@ -7,7 +7,7 @@ class ApiService extends GetxService {
   late Dio _dio;
 
   // Update this to your local server IP if testing on a physical device
-  static const String baseUrl = 'http://192.168.7.241:8000';
+  static const String baseUrl = 'http://192.168.7.180:8000';
 
   Dio get dio => _dio;
 

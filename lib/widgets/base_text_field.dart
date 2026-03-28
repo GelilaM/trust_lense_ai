@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
@@ -13,6 +14,8 @@ class BaseTextField extends StatelessWidget {
   final String? errorText;
   final Function(String)? onChanged;
   final String? Function(String?)? validator;
+  final List<TextInputFormatter>? inputFormatters;
+  final int? maxLength;
 
   const BaseTextField({
     super.key,
@@ -26,6 +29,8 @@ class BaseTextField extends StatelessWidget {
     this.onChanged,
     this.validator,
     this.errorText,
+    this.inputFormatters,
+    this.maxLength,
   });
 
   @override
@@ -47,6 +52,8 @@ class BaseTextField extends StatelessWidget {
           obscureText: obscureText,
           onChanged: onChanged,
           validator: validator,
+          inputFormatters: inputFormatters,
+          maxLength: maxLength,
           style: context.textTheme.bodyLarge?.copyWith(
             color: context.theme.colorScheme.onSurface,
           ),

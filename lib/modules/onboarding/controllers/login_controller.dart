@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../data/providers/auth_provider.dart';
 import '../../../core/services/auth_service.dart';
+import '../../../core/utils/phone_validation.dart';
 
 class LoginController extends GetxController {
   final _authProvider = AuthProvider();
@@ -13,6 +14,7 @@ class LoginController extends GetxController {
   final isLoading = false.obs;
   final phoneError = RxnString();
   final passwordError = RxnString();
+  final obscurePassword = true.obs;
 
   Future<void> login() async {
     if (!_validate()) return;
@@ -20,7 +22,7 @@ class LoginController extends GetxController {
     try {
       isLoading.value = true;
       final user = await _authProvider.signIn(
-        phone: phoneController.text.trim(),
+        phone: PhoneValidation.normalizeDigits(phoneController.text),
         password: passwordController.text,
       );
 
@@ -31,7 +33,7 @@ class LoginController extends GetxController {
         'Login Failed',
         'Invalid phone number or password',
         snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Get.theme.colorScheme.error.withOpacity(0.1),
+        backgroundColor: Get.theme.colorScheme.error.withValues(alpha: 0.1),
         colorText: Get.theme.colorScheme.error,
       );
     } finally {
@@ -39,10 +41,15 @@ class LoginController extends GetxController {
     }
   }
 
+  void togglePasswordVisibility() {
+    obscurePassword.value = !obscurePassword.value;
+  }
+
   bool _validate() {
     bool isValid = true;
-    if (phoneController.text.trim().isEmpty) {
-      phoneError.value = 'Phone number is required';
+    final phoneErr = PhoneValidation.validate(phoneController.text);
+    if (phoneErr != null) {
+      phoneError.value = phoneErr;
       isValid = false;
     } else {
       phoneError.value = null;

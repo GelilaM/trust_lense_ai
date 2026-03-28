@@ -21,6 +21,16 @@ class TrustCardProvider {
     }
   }
 
+  /// Creates or refreshes the trust card when combined score is above the API threshold.
+  /// Required before [selectProduct] if the user has never called issue.
+  Future<TrustCardModel> issueCard(String userId) async {
+    final response = await _apiService.dio.post(
+      '/trust-card/issue',
+      queryParameters: {'user_id': userId},
+    );
+    return TrustCardModel.fromJson(response.data);
+  }
+
   Future<TrustCardModel> selectProduct(String userId, String product) async {
     final response = await _apiService.dio.post(
       '/trust-card/select',

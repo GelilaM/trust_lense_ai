@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -87,11 +88,15 @@ class LoginView extends GetView<LoginController> {
                       Obx(
                         () => BaseTextField(
                           label: 'Phone Number',
-                          hintText: '09275451321',
+                          hintText: '0911......',
                           prefixIcon: Icons.phone,
                           controller: controller.phoneController,
-                          keyboardType: TextInputType.phone,
+                          keyboardType: TextInputType.number,
                           errorText: controller.phoneError.value,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                            LengthLimitingTextInputFormatter(10),
+                          ],
                         ),
                       ),
                       SizedBox(height: 24.h),
@@ -101,8 +106,18 @@ class LoginView extends GetView<LoginController> {
                           hintText: 'Enter your password',
                           prefixIcon: Icons.lock_outline,
                           controller: controller.passwordController,
-                          obscureText: true,
+                          keyboardType: TextInputType.visiblePassword,
+                          obscureText: controller.obscurePassword.value,
                           errorText: controller.passwordError.value,
+                          suffixIcon: IconButton(
+                            onPressed: controller.togglePasswordVisibility,
+                            icon: Icon(
+                              controller.obscurePassword.value
+                                  ? Icons.visibility_outlined
+                                  : Icons.visibility_off_outlined,
+                              color: context.theme.colorScheme.outline,
+                            ),
+                          ),
                         ),
                       ),
 

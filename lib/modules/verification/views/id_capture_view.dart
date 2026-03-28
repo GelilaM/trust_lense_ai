@@ -146,18 +146,24 @@ class IdCaptureView extends GetView<IdCaptureController> {
                               _buildReviewCard(
                                 'Front Side',
                                 controller.frontImagePath.value,
-                                () => controller.downloadDoc(
+                                onDownload: () => controller.downloadDoc(
                                   controller.frontImagePath.value,
                                   'Front',
+                                ),
+                                onCrop: () => controller.openCropEditorForSide(
+                                  isFront: true,
                                 ),
                               ),
                               SizedBox(height: 16.h),
                               _buildReviewCard(
                                 'Back Side',
                                 controller.backImagePath.value,
-                                () => controller.downloadDoc(
+                                onDownload: () => controller.downloadDoc(
                                   controller.backImagePath.value,
                                   'Back',
+                                ),
+                                onCrop: () => controller.openCropEditorForSide(
+                                  isFront: false,
                                 ),
                               ),
                             ],
@@ -173,11 +179,62 @@ class IdCaptureView extends GetView<IdCaptureController> {
                       if (currentPath != null) {
                         return ClipRRect(
                           borderRadius: BorderRadius.circular(16.r),
-                          child: Image.file(
-                            File(currentPath),
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                            height: 480.h,
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Container(
+                                width: double.infinity,
+                                height: 480.h,
+                                color: Colors.black,
+                                alignment: Alignment.center,
+                                child: Image.file(
+                                  File(currentPath),
+                                  fit: BoxFit.contain,
+                                  width: double.infinity,
+                                  height: 480.h,
+                                ),
+                              ),
+                              Positioned(
+                                left: 12.w,
+                                right: 12.w,
+                                bottom: 12.h,
+                                child: Material(
+                                  color: Colors.black.withValues(alpha: 0.5),
+                                  borderRadius: BorderRadius.circular(14.r),
+                                  child: InkWell(
+                                    onTap:
+                                        controller.openCropEditorForCurrentStep,
+                                    borderRadius: BorderRadius.circular(14.r),
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: 10.h,
+                                        horizontal: 14.w,
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Icon(
+                                            Icons.crop_rotate,
+                                            color: const Color(0xFF44DDC2),
+                                            size: 20.w,
+                                          ),
+                                          SizedBox(width: 8.w),
+                                          Text(
+                                            'Crop or straighten',
+                                            style: GoogleFonts.inter(
+                                              fontSize: 14.sp,
+                                              fontWeight: FontWeight.w700,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         );
                       }
@@ -311,14 +368,16 @@ class IdCaptureView extends GetView<IdCaptureController> {
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      // Retake Button
                       _buildControlItem(
                         icon: Icons.refresh,
                         label: 'Retake',
                         onPressed: controller.retake,
                       ),
-
-                      // Next Button
+                      _buildControlItem(
+                        icon: Icons.crop_rotate,
+                        label: 'Crop',
+                        onPressed: controller.openCropEditorForCurrentStep,
+                      ),
                       _buildControlItem(
                         icon: Icons.check,
                         label: 'Next',
@@ -419,9 +478,10 @@ class IdCaptureView extends GetView<IdCaptureController> {
 
   Widget _buildReviewCard(
     String title,
-    String? imagePath,
-    VoidCallback onDownload,
-  ) {
+    String? imagePath, {
+    required VoidCallback onDownload,
+    required VoidCallback onCrop,
+  }) {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(12.w),
@@ -438,11 +498,17 @@ class IdCaptureView extends GetView<IdCaptureController> {
           ClipRRect(
             borderRadius: BorderRadius.circular(8.r),
             child: imagePath != null
-                ? Image.file(
-                    File(imagePath),
+                ? Container(
                     width: 100.w,
                     height: 60.h,
-                    fit: BoxFit.cover,
+                    color: Colors.black26,
+                    alignment: Alignment.center,
+                    child: Image.file(
+                      File(imagePath),
+                      width: 100.w,
+                      height: 60.h,
+                      fit: BoxFit.contain,
+                    ),
                   )
                 : Container(width: 100.w, height: 60.h, color: Colors.black26),
           ),
@@ -469,13 +535,28 @@ class IdCaptureView extends GetView<IdCaptureController> {
               ],
             ),
           ),
-          IconButton(
-            icon: Icon(
-              Icons.download,
-              color: const Color(0xFF44DDC2),
-              size: 24.w,
-            ),
-            onPressed: onDownload,
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                tooltip: 'Crop',
+                icon: Icon(
+                  Icons.crop_rotate,
+                  color: const Color(0xFF44DDC2),
+                  size: 22.w,
+                ),
+                onPressed: onCrop,
+              ),
+              IconButton(
+                tooltip: 'Save to gallery',
+                icon: Icon(
+                  Icons.download,
+                  color: const Color(0xFF44DDC2),
+                  size: 24.w,
+                ),
+                onPressed: onDownload,
+              ),
+            ],
           ),
         ],
       ),

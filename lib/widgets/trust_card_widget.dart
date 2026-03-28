@@ -21,7 +21,7 @@ class TrustCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 200.h,
+      height: 212.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24.r),
         gradient: LinearGradient(
@@ -33,9 +33,9 @@ class TrustCardWidget extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
-            blurRadius: 15,
-            offset: const Offset(0, 8),
+            color: Colors.black.withValues(alpha: 0.2),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
           ),
         ],
       ),
@@ -48,10 +48,10 @@ class TrustCardWidget extends StatelessWidget {
             child: Icon(
               Icons.security,
               size: 150.w,
-              color: Colors.white.withOpacity(0.03),
+              color: Colors.white.withValues(alpha: 0.03),
             ),
           ),
-          
+
           Padding(
             padding: EdgeInsets.all(24.w),
             child: Column(
@@ -79,25 +79,29 @@ class TrustCardWidget extends StatelessWidget {
                           style: GoogleFonts.inter(
                             fontSize: 10.sp,
                             fontWeight: FontWeight.w600,
-                            color: Colors.white.withOpacity(0.6),
+                            color: Colors.white.withValues(alpha: 0.6),
                           ),
                         ),
                       ],
                     ),
                     Icon(
                       Icons.blur_on,
-                      color: Colors.white.withOpacity(0.8),
+                      color: Colors.white.withValues(alpha: 0.8),
                       size: 28.w,
                     ),
                   ],
                 ),
-                
+
                 if (isLocked)
                   Center(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.lock_outline, color: Colors.white38, size: 32.w),
+                        Icon(
+                          Icons.lock_outline,
+                          color: Colors.white38,
+                          size: 32.w,
+                        ),
                         SizedBox(height: 8.h),
                         Text(
                           'Score > 45 required to unlock',
@@ -114,7 +118,9 @@ class TrustCardWidget extends StatelessWidget {
                     child: TextButton(
                       onPressed: onIssuePressed,
                       style: TextButton.styleFrom(
-                        backgroundColor: const Color(0xFF44DDC2).withOpacity(0.1),
+                        backgroundColor: const Color(
+                          0xFF44DDC2,
+                        ).withValues(alpha: 0.12),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12.r),
                         ),
@@ -139,29 +145,57 @@ class TrustCardWidget extends StatelessWidget {
                       letterSpacing: 2.0,
                     ),
                   ),
+                  SizedBox(height: 12.h),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'SELECTED PRODUCT',
-                            style: GoogleFonts.inter(
-                              fontSize: 9.sp,
-                              color: Colors.white54,
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'SELECTED PRODUCT',
+                              style: GoogleFonts.inter(
+                                fontSize: 9.sp,
+                                color: Colors.white54,
+                              ),
                             ),
-                          ),
-                          Text(
-                            card!.selectedProduct?.toUpperCase() ?? 'NONE SELECTED',
-                            style: GoogleFonts.inter(
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                            SizedBox(height: 4.h),
+                            Text(
+                              card!.selectedProduct
+                                      ?.replaceAll('_', ' ')
+                                      .toUpperCase() ??
+                                  'NONE YET',
+                              style: GoogleFonts.inter(
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
+                      // if (onSelectProductPressed != null)
+                      //   TextButton.icon(
+                      //     onPressed: onSelectProductPressed,
+                      //     style: TextButton.styleFrom(
+                      //       foregroundColor: const Color(0xFF44DDC2),
+                      //       padding: EdgeInsets.symmetric(
+                      //         horizontal: 10.w,
+                      //         vertical: 4.h,
+                      //       ),
+                      //       minimumSize: Size.zero,
+                      //       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      //     ),
+                      //     icon: Icon(Icons.add_circle_outline, size: 16.w),
+                      //     label: Text(
+                      //       'Products',
+                      //       style: GoogleFonts.inter(
+                      //         fontSize: 12.sp,
+                      //         fontWeight: FontWeight.w700,
+                      //       ),
+                      //     ),
+                      //   ),
                     ],
                   ),
                 ],
